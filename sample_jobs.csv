@@ -1,0 +1,12 @@
+job_name,job_description,client_name,site_contact,job_address,latitude,longitude,start_date,deadline,status,employee_ids
+Downtown Office Renovation,"Complete interior renovation of 5th floor office space including electrical, plumbing, and drywall",Acme Corporation,Tom Anderson - 555-1234,"555 Market St, San Francisco, CA 94105",37.789872,-122.400694,2025-10-15,2025-12-20,pending,"1,2,3"
+Residential Kitchen Remodel,"Full kitchen remodel with custom cabinets, granite countertops, and new appliances",Johnson Family,Sarah Johnson - 555-5678,"789 Maple Ave, Berkeley, CA 94704",37.869085,-122.270568,2025-10-20,2025-11-30,pending,"4,5"
+Commercial HVAC Installation,"Install new HVAC system for 3-story commercial building",GreenTech Industries,Mike Chen - 555-9012,"1200 California St, Mountain View, CA 94041",37.386051,-122.083851,2025-11-01,2026-01-15,pending,"6,7,8"
+Bridge Maintenance Project,"Routine maintenance and painting of Golden Gate Bridge section",SF Public Works,Robert Davis - 555-3456,"Golden Gate Bridge, San Francisco, CA 94129",37.819929,-122.478255,2025-10-25,2025-12-10,pending,"9,10,11"
+New Construction Home,"Build 4-bedroom single family home with 2-car garage",Miller Construction,Lisa Miller - 555-7890,"456 Hillside Dr, Palo Alto, CA 94301",37.429167,-122.138056,2025-11-10,2026-04-30,pending,"1,3,5,7"
+Warehouse Expansion,"Expand existing warehouse by 10000 sq ft with new loading docks",Pacific Logistics,James Wong - 555-2468,"3500 Industrial Blvd, Hayward, CA 94545",37.668819,-122.080795,2025-10-18,2026-02-28,pending,"2,4,6"
+School Roofing Project,"Replace entire roof system for elementary school building",Oakland School District,Patricia Green - 555-1357,"890 School Way, Oakland, CA 94601",37.804363,-122.271111,2025-11-05,2025-12-15,pending,"8,9,10"
+Parking Lot Repaving,"Repave and reline 200-space parking lot with new lighting",Bay Area Shopping Center,David Park - 555-8024,"2100 Commerce Dr, San Jose, CA 95131",37.368830,-121.915734,2025-10-22,2025-11-10,pending,"11,12"
+Dental Office Build-Out,"Complete tenant improvement for new dental practice",Dr. Smith DDS,Jennifer Smith - 555-4680,"750 Medical Plaza, Sunnyvale, CA 94087",37.371014,-122.038223,2025-11-08,2026-01-20,pending,"1,2,4"
+Historic Building Restoration,"Restore facade and update interior systems of 1920s building",Heritage Foundation,Michael Ross - 555-9753,"333 Heritage Ln, San Francisco, CA 94133",37.800799,-122.410599,2025-12-01,2026-06-30,pending,"3,5,7,9"
+

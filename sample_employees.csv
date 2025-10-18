@@ -1,0 +1,13 @@
+fullname,email,phone,address,role_id,availability_status
+John Smith,john.smith@example.com,+1-555-0101,"123 Main St, San Francisco, CA 94102",1,available
+Maria Garcia,maria.garcia@example.com,+1-555-0102,"456 Oak Ave, San Francisco, CA 94103",2,available
+David Chen,david.chen@example.com,+1-555-0103,"789 Pine Rd, Oakland, CA 94601",1,available
+Sarah Johnson,sarah.johnson@example.com,+1-555-0104,"321 Elm St, Berkeley, CA 94704",1,available
+Michael Brown,michael.brown@example.com,+1-555-0105,"654 Maple Dr, San Jose, CA 95110",1,on_leave
+Emma Wilson,emma.wilson@example.com,+1-555-0106,"987 Cedar Ln, Palo Alto, CA 94301",1,available
+James Martinez,james.martinez@example.com,+1-555-0107,"147 Birch Way, Mountain View, CA 94040",4,available
+Lisa Anderson,lisa.anderson@example.com,+1-555-0108,"258 Spruce St, Sunnyvale, CA 94086",1,available
+Robert Taylor,robert.taylor@example.com,+1-555-0109,"369 Willow Ct, Fremont, CA 94536",1,unavailable
+Jennifer Lee,jennifer.lee@example.com,+1-555-0110,"741 Ash Blvd, Hayward, CA 94541",1,available
+William Thomas,william.thomas@example.com,+1-555-0111,"852 Redwood Pl, San Mateo, CA 94401",1,available
+Jessica Moore,jessica.moore@example.com,+1-555-0112,"963 Sycamore Ave, Daly City, CA 94014",1,available

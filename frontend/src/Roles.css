@@ -1,0 +1,217 @@
+.roles-container {
+  padding: 32px 40px;
+  background: #f9fafb;
+  min-height: calc(100vh - 70px);
+  width: 100%;
+}
+
+.roles-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.roles-header h1 {
+  font-size: 28px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.roles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.role-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.2s ease;
+}
+
+.role-card:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+
+.role-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.role-card-header h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.role-status {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.role-status.active {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.role-status.inactive {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.role-description {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.6;
+  margin: 0 0 20px 0;
+  min-height: 42px;
+}
+
+.role-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.employee-count {
+  font-size: 13px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.role-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-role-action {
+  padding: 6px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-role-action.edit {
+  color: #2563eb;
+}
+
+.btn-role-action.edit:hover {
+  background: #eff6ff;
+  border-color: #2563eb;
+}
+
+.btn-role-action.delete {
+  color: #dc2626;
+}
+
+.btn-role-action.delete:hover {
+  background: #fef2f2;
+  border-color: #dc2626;
+}
+
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 12px;
+  border: 2px dashed #e5e7eb;
+}
+
+.empty-state p {
+  font-size: 16px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.loading {
+  padding: 60px 20px;
+  text-align: center;
+  color: #6b7280;
+  font-size: 16px;
+}
+
+/* Checkbox Group */
+.checkbox-group {
+  margin-bottom: 0;
+}
+
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #FF6B35;
+}
+
+.checkbox-group label span {
+  font-size: 14px;
+  font-weight: 400;
+  color: #374151;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .roles-container {
+    padding: 24px;
+  }
+
+  .roles-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .roles-container {
+    padding: 16px;
+  }
+
+  .roles-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .roles-header .btn-add-new {
+    width: 100%;
+  }
+
+  .roles-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .role-card-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .role-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+

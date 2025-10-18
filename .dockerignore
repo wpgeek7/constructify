@@ -1,0 +1,51 @@
+# Version Control
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+*.md
+README.md
+LICENSE
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backend specific
+backend/vendor
+backend/node_modules
+backend/.env
+backend/.env.*
+backend/storage/logs/*
+backend/storage/framework/cache/*
+backend/storage/framework/sessions/*
+backend/storage/framework/views/*
+backend/bootstrap/cache/*
+
+# Frontend specific
+frontend/node_modules
+frontend/build
+frontend/.env
+frontend/.env.*
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+
+# Testing
+backend/tests
+frontend/src/**/*.test.js
+frontend/src/**/*.spec.js
+
+# Temporary files
+*.log
+tmp
+temp
+
