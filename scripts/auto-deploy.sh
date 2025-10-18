@@ -27,17 +27,17 @@ echo -e "${GREEN}✓ Code updated${NC}"
 
 echo ""
 echo -e "${YELLOW}Step 2: Stopping containers...${NC}"
-docker-compose down
+docker compose down
 echo -e "${GREEN}✓ Containers stopped${NC}"
 
 echo ""
 echo -e "${YELLOW}Step 3: Rebuilding containers...${NC}"
-docker-compose build --no-cache
+docker compose build --no-cache
 echo -e "${GREEN}✓ Containers rebuilt${NC}"
 
 echo ""
 echo -e "${YELLOW}Step 4: Starting containers...${NC}"
-docker-compose up -d
+docker compose up -d
 echo -e "${GREEN}✓ Containers started${NC}"
 
 echo ""
@@ -46,33 +46,33 @@ sleep 10
 
 echo ""
 echo -e "${YELLOW}Step 6: Running database migrations...${NC}"
-docker-compose exec -T backend php artisan migrate --force
+docker compose exec -T backend php artisan migrate --force
 echo -e "${GREEN}✓ Migrations completed${NC}"
 
 echo ""
 echo -e "${YELLOW}Step 7: Clearing and caching configurations...${NC}"
-docker-compose exec -T backend php artisan config:cache
-docker-compose exec -T backend php artisan route:cache
-docker-compose exec -T backend php artisan view:cache
+docker compose exec -T backend php artisan config:cache
+docker compose exec -T backend php artisan route:cache
+docker compose exec -T backend php artisan view:cache
 echo -e "${GREEN}✓ Cache optimized${NC}"
 
 echo ""
 echo -e "${YELLOW}Step 8: Setting permissions...${NC}"
-docker-compose exec -T backend chown -R www-data:www-data /var/www/html/storage
-docker-compose exec -T backend chmod -R 775 /var/www/html/storage
+docker compose exec -T backend chown -R www-data:www-data /var/www/html/storage
+docker compose exec -T backend chmod -R 775 /var/www/html/storage
 echo -e "${GREEN}✓ Permissions set${NC}"
 
 echo ""
 echo -e "${YELLOW}Step 9: Verifying deployment...${NC}"
-docker-compose ps
+docker compose ps
 echo ""
 
 # Check if containers are running
-if docker-compose ps | grep -q "Up"; then
+if docker compose ps | grep -q "Up"; then
     echo -e "${GREEN}✓ All containers are running${NC}"
 else
     echo -e "${RED}✗ Some containers are not running${NC}"
-    docker-compose logs --tail=50
+    docker compose logs --tail=50
     exit 1
 fi
 
