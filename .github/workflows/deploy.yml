@@ -27,21 +27,24 @@ jobs:
             git pull origin main
             
             # Rebuild and restart containers
-            docker compose down
-            docker compose build --no-cache
-            docker compose up -d
+            docker compose -f docker-compose.prod.yml down
+            docker compose -f docker-compose.prod.yml build --no-cache
+            docker compose -f docker-compose.prod.yml up -d
+            
+            # Wait for containers
+            sleep 10
             
             # Run migrations
-            docker compose exec -T backend php artisan migrate --force
+            docker compose -f docker-compose.prod.yml exec -T backend php artisan migrate --force
             
             # Clear and cache config
-            docker compose exec -T backend php artisan config:cache
-            docker compose exec -T backend php artisan route:cache
-            docker compose exec -T backend php artisan view:cache
+            docker compose -f docker-compose.prod.yml exec -T backend php artisan config:cache
+            docker compose -f docker-compose.prod.yml exec -T backend php artisan route:cache
+            docker compose -f docker-compose.prod.yml exec -T backend php artisan view:cache
             
             # Set permissions
-            docker compose exec -T backend chown -R www-data:www-data /var/www/html/storage
-            docker compose exec -T backend chmod -R 775 /var/www/html/storage
+            docker compose -f docker-compose.prod.yml exec -T backend chown -R www-data:www-data /var/www/html/storage
+            docker compose -f docker-compose.prod.yml exec -T backend chmod -R 775 /var/www/html/storage
             
             echo "✅ Deployment completed successfully!"
 
@@ -53,10 +56,11 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd /home/ubuntu/constructify
-            docker compose ps
+            docker compose -f docker-compose.prod.yml ps
             echo "Checking application health..."
             sleep 5
-            curl -f http://localhost:8000/api/health || echo "Health check failed"
+            curl -f http://localhost || echo "Frontend check"
+            curl -f http://localhost:8000 || echo "Backend check"
 
       - name: Notify on Success
         if: success()

@@ -110,9 +110,9 @@ chmod +x deploy-ec2.sh setup-ec2.sh scripts/*.sh
 
 echo ""
 echo -e "${YELLOW}Step 8: Building and starting Docker containers...${NC}"
-docker compose down 2>/dev/null || true
-docker compose build
-docker compose up -d
+docker compose -f docker-compose.prod.yml down 2>/dev/null || true
+docker compose -f docker-compose.prod.yml build
+docker compose -f docker-compose.prod.yml up -d
 
 echo ""
 echo -e "${YELLOW}Step 9: Waiting for containers to be ready...${NC}"
@@ -120,22 +120,22 @@ sleep 15
 
 echo ""
 echo -e "${YELLOW}Step 10: Generating Laravel application key...${NC}"
-docker compose exec -T backend php artisan key:generate --force
+docker compose -f docker-compose.prod.yml exec -T backend php artisan key:generate --force
 
 echo ""
 echo -e "${YELLOW}Step 11: Running database migrations...${NC}"
-docker compose exec -T backend php artisan migrate --force
+docker compose -f docker-compose.prod.yml exec -T backend php artisan migrate --force
 
 echo ""
 echo -e "${YELLOW}Step 12: Optimizing Laravel...${NC}"
-docker compose exec -T backend php artisan config:cache
-docker compose exec -T backend php artisan route:cache
-docker compose exec -T backend php artisan view:cache
+docker compose -f docker-compose.prod.yml exec -T backend php artisan config:cache
+docker compose -f docker-compose.prod.yml exec -T backend php artisan route:cache
+docker compose -f docker-compose.prod.yml exec -T backend php artisan view:cache
 
 echo ""
 echo -e "${YELLOW}Step 13: Setting permissions...${NC}"
-docker compose exec -T backend chown -R www-data:www-data /var/www/html/storage
-docker compose exec -T backend chmod -R 775 /var/www/html/storage
+docker compose -f docker-compose.prod.yml exec -T backend chown -R www-data:www-data /var/www/html/storage
+docker compose -f docker-compose.prod.yml exec -T backend chmod -R 775 /var/www/html/storage
 
 echo ""
 echo -e "${YELLOW}Step 14: Creating deployment user for GitHub Actions...${NC}"
@@ -153,7 +153,7 @@ echo -e "Frontend: ${GREEN}http://3.93.201.157${NC}"
 echo -e "Backend API: ${GREEN}http://3.93.201.157:8000${NC}"
 echo ""
 echo -e "${YELLOW}Container Status:${NC}"
-docker compose ps
+docker compose -f docker-compose.prod.yml ps
 echo ""
 echo -e "${YELLOW}Next Steps:${NC}"
 echo "1. Verify application is accessible"
