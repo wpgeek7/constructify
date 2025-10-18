@@ -17,7 +17,7 @@ import Scheduling from './Scheduling';
 import Reports from './Reports';
 import './App.css';
 
-const GOOGLE_CLIENT_ID = '641924991963-vbpberb599gec6d2kuath2m3hmdr1792.apps.googleusercontent.com';
+const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID || '641924991963-vbpberb599gec6d2kuath2m3hmdr1792.apps.googleusercontent.com';
 
 function App() {
   const [currentStep, setCurrentStep] = useState('login');

@@ -70,7 +70,8 @@ const Login = ({ onLoginSuccess, onGoogleSuccess, onSwitchToSignup, onForgotPass
   const handleGoogleLogin = async (credentialResponse) => {
     try {
       setLoading(true);
-      const response = await axios.post('http://localhost:8000/api/google-auth', {
+      const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
+      const response = await axios.post(`${API_URL}/google-auth`, {
         credential: credentialResponse.credential
       }, {
         headers: {

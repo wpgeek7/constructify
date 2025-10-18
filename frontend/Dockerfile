@@ -5,6 +5,16 @@ FROM node:18-alpine as build
 
 WORKDIR /app
 
+# Build arguments for environment variables
+ARG REACT_APP_API_URL=https://constructefy.ai/api
+ARG REACT_APP_GOOGLE_CLIENT_ID=641924991963-vbpberb599gec6d2kuath2m3hmdr1792.apps.googleusercontent.com
+ARG REACT_APP_GOOGLE_MAPS_API_KEY=AIzaSyBT_YvAqHvUwSdXnLWLsAMELSxjBvPOdXk
+
+# Set environment variables for build
+ENV REACT_APP_API_URL=$REACT_APP_API_URL
+ENV REACT_APP_GOOGLE_CLIENT_ID=$REACT_APP_GOOGLE_CLIENT_ID
+ENV REACT_APP_GOOGLE_MAPS_API_KEY=$REACT_APP_GOOGLE_MAPS_API_KEY
+
 # Copy package files
 COPY package*.json ./
 

@@ -27,24 +27,24 @@ jobs:
             git pull origin main
             
             # Rebuild and restart containers
-            docker compose -f docker-compose.prod.yml down
-            docker compose -f docker-compose.prod.yml build --no-cache
-            docker compose -f docker-compose.prod.yml up -d
+            docker compose -f docker-compose.ssl.yml down
+            docker compose -f docker-compose.ssl.yml build --no-cache
+            docker compose -f docker-compose.ssl.yml up -d
             
             # Wait for containers
             sleep 10
             
             # Run migrations
-            docker compose -f docker-compose.prod.yml exec -T backend php artisan migrate --force
+            docker compose -f docker-compose.ssl.yml exec -T backend php artisan migrate --force
             
             # Clear and cache config
-            docker compose -f docker-compose.prod.yml exec -T backend php artisan config:cache
-            docker compose -f docker-compose.prod.yml exec -T backend php artisan route:cache
-            docker compose -f docker-compose.prod.yml exec -T backend php artisan view:cache
+            docker compose -f docker-compose.ssl.yml exec -T backend php artisan config:cache
+            docker compose -f docker-compose.ssl.yml exec -T backend php artisan route:cache
+            docker compose -f docker-compose.ssl.yml exec -T backend php artisan view:cache
             
             # Set permissions
-            docker compose -f docker-compose.prod.yml exec -T backend chown -R www-data:www-data /var/www/html/storage
-            docker compose -f docker-compose.prod.yml exec -T backend chmod -R 775 /var/www/html/storage
+            docker compose -f docker-compose.ssl.yml exec -T backend chown -R www-data:www-data /var/www/html/storage
+            docker compose -f docker-compose.ssl.yml exec -T backend chmod -R 775 /var/www/html/storage
             
             echo "✅ Deployment completed successfully!"
 
@@ -56,18 +56,18 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd /home/ubuntu/constructify
-            docker compose -f docker-compose.prod.yml ps
+            docker compose -f docker-compose.ssl.yml ps
             echo "Checking application health..."
             sleep 5
-            curl -f http://localhost || echo "Frontend check"
-            curl -f http://localhost:8000 || echo "Backend check"
+            curl -f https://constructefy.ai || echo "Frontend check"
+            curl -f https://constructefy.ai/api || echo "Backend check"
 
       - name: Notify on Success
         if: success()
         run: |
           echo "🎉 Deployment to EC2 successful!"
-          echo "Frontend: http://3.93.201.157"
-          echo "Backend: http://3.93.201.157:8000"
+          echo "Website: https://constructefy.ai"
+          echo "API: https://constructefy.ai/api"
 
       - name: Notify on Failure
         if: failure()
