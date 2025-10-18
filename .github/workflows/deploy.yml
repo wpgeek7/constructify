@@ -20,19 +20,31 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
+          command_timeout: 30m
           script: |
             cd /home/ubuntu/constructify
             
             # Pull latest code
             git pull origin main
             
-            # Rebuild and restart containers
+            # Rebuild and restart containers (without --no-cache for faster builds)
             docker compose -f docker-compose.ssl.yml down
-            docker compose -f docker-compose.ssl.yml build --no-cache
+            docker compose -f docker-compose.ssl.yml build
             docker compose -f docker-compose.ssl.yml up -d
             
-            # Wait for containers
-            sleep 10
+            # Wait for database to be healthy (increased time)
+            echo "⏳ Waiting for database to be ready..."
+            sleep 30
+            
+            # Wait for database health check
+            for i in {1..30}; do
+              if docker compose -f docker-compose.ssl.yml exec -T database mysqladmin ping -h localhost --silent; then
+                echo "✅ Database is ready!"
+                break
+              fi
+              echo "Waiting for database... ($i/30)"
+              sleep 2
+            done
             
             # Run migrations
             docker compose -f docker-compose.ssl.yml exec -T backend php artisan migrate --force
@@ -54,6 +66,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
+          command_timeout: 5m
           script: |
             cd /home/ubuntu/constructify
             docker compose -f docker-compose.ssl.yml ps
