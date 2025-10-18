@@ -1,0 +1,72 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /home/ubuntu/constructify
+            
+            # Pull latest code
+            git pull origin main
+            
+            # Rebuild and restart containers
+            docker-compose down
+            docker-compose build --no-cache
+            docker-compose up -d
+            
+            # Run migrations
+            docker-compose exec -T backend php artisan migrate --force
+            
+            # Clear and cache config
+            docker-compose exec -T backend php artisan config:cache
+            docker-compose exec -T backend php artisan route:cache
+            docker-compose exec -T backend php artisan view:cache
+            
+            # Set permissions
+            docker-compose exec -T backend chown -R www-data:www-data /var/www/html/storage
+            docker-compose exec -T backend chmod -R 775 /var/www/html/storage
+            
+            echo "✅ Deployment completed successfully!"
+
+      - name: Verify Deployment
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /home/ubuntu/constructify
+            docker-compose ps
+            echo "Checking application health..."
+            sleep 5
+            curl -f http://localhost:8000/api/health || echo "Health check failed"
+
+      - name: Notify on Success
+        if: success()
+        run: |
+          echo "🎉 Deployment to EC2 successful!"
+          echo "Frontend: http://3.93.201.157"
+          echo "Backend: http://3.93.201.157:8000"
+
+      - name: Notify on Failure
+        if: failure()
+        run: |
+          echo "❌ Deployment failed! Check the logs above."
+
