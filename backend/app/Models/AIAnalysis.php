@@ -9,6 +9,11 @@ class AIAnalysis extends Model
 {
     use HasFactory;
 
+    /**
+     * The table associated with the model.
+     */
+    protected $table = 'ai_analyses';
+
     protected $fillable = [
         'upload_id',
         'job_id',
