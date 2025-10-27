@@ -186,11 +186,10 @@ const AITestPage = () => {
                         </div>
 
                         <div className="upload-actions">
-                          {!analysis && !isAnalyzing && (
+                          {!isAnalyzing && !analysis && (
                             <button 
                               className="btn-analyze"
                               onClick={() => analyzePhoto(upload.id, job.job_name)}
-                              disabled={isAnalyzing}
                             >
                               🤖 Analyze with AI
                             </button>
@@ -199,46 +198,36 @@ const AITestPage = () => {
                           {isAnalyzing && (
                             <div className="analyzing-spinner">
                               <div className="spinner"></div>
-                              Analyzing...
+                              <span>Analyzing...</span>
                             </div>
                           )}
 
                           {analysis && !isAnalyzing && (
-                            <>
+                            <div className="analyzed-section">
+                              <div className="analysis-header">
+                                <span 
+                                  className="compliance-badge"
+                                  style={{ backgroundColor: getComplianceColor(analysis.compliance_score) }}
+                                >
+                                  {analysis.compliance_score}% Compliant
+                                </span>
+                                <button 
+                                  className="btn-reanalyze-small"
+                                  onClick={() => analyzePhoto(upload.id, job.job_name)}
+                                  title="Re-analyze"
+                                >
+                                  🔄 Re-analyze
+                                </button>
+                              </div>
                               <button 
-                                className="btn-view-results"
-                                onClick={() => getAnalysis(upload.id)}
+                                className="btn-see-details"
+                                onClick={() => openAnalysisModal(analysis, `${API_URL.replace('/api', '')}/storage/${upload.file_path}`)}
                               >
-                                👁️ View Results
+                                📊 See Detailed Analysis
                               </button>
-                              <button 
-                                className="btn-reanalyze"
-                                onClick={() => analyzePhoto(upload.id, job.job_name)}
-                              >
-                                🔄 Re-analyze
-                              </button>
-                            </>
+                            </div>
                           )}
                         </div>
-
-                        {analysis && (
-                          <div className="analysis-summary">
-                            <div className="summary-badge">
-                              <span 
-                                className="compliance-badge-small"
-                                style={{ backgroundColor: getComplianceColor(analysis.compliance_score) }}
-                              >
-                                {analysis.compliance_score}% Compliant
-                              </span>
-                            </div>
-                            <button 
-                              className="btn-see-details"
-                              onClick={() => openAnalysisModal(analysis, `${API_URL.replace('/api', '')}/storage/${upload.file_path}`)}
-                            >
-                              📊 See Detailed Analysis
-                            </button>
-                          </div>
-                        )}
                       </div>
                     );
                   })}
