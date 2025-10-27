@@ -22,7 +22,7 @@ class JobController extends Controller
     {
         // Optimized: Only load employee count and basic info for list view
         $query = Job::withCount('employees')
-            ->with(['employees:id,fullname', 'creator:id,fullname']);
+            ->with(['employees:id,fullname', 'creator:id,fullname', 'uploads']);
 
         // Filter by status
         if ($request->has('status')) {
