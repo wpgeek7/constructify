@@ -21,6 +21,9 @@ class JobUpload extends Model
         'file_size',
         'transcription',
         'description',
+        'ai_analyzed',
+        'ai_analysis_id',
+        'ai_analyzed_at',
     ];
 
     /**
@@ -30,6 +33,8 @@ class JobUpload extends Model
      */
     protected $casts = [
         'file_size' => 'integer',
+        'ai_analyzed' => 'boolean',
+        'ai_analyzed_at' => 'datetime',
     ];
 
     /**
@@ -46,6 +51,14 @@ class JobUpload extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the AI analysis for this upload.
+     */
+    public function aiAnalysis(): BelongsTo
+    {
+        return $this->belongsTo(AIAnalysis::class, 'ai_analysis_id');
     }
 
     /**

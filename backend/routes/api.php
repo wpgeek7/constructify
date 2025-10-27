@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\Api\JobController;
+use App\Http\Controllers\Api\AIAnalysisController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -59,6 +60,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/jobs/{id}', [JobController::class, 'destroy']);
         Route::post('/jobs/bulk-upload', [JobController::class, 'bulkUpload']);
         Route::get('/jobs/{id}/employee-locations', [JobController::class, 'getEmployeeLocations']);
+
+        // AI Analysis Routes (Admin only)
+        Route::post('/uploads/{id}/analyze', [AIAnalysisController::class, 'analyzePhoto']);
+        Route::get('/uploads/{id}/analysis', [AIAnalysisController::class, 'getAnalysis']);
+        Route::post('/uploads/{id}/reanalyze', [AIAnalysisController::class, 'reanalyzePhoto']);
+        Route::get('/jobs/{id}/ai-stats', [AIAnalysisController::class, 'getJobAIStats']);
     });
 
     // Routes accessible by both admin and employee
