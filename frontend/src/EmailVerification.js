@@ -8,6 +8,8 @@ const EmailVerification = ({ userData, onVerificationSuccess, onBack }) => {
   const [loading, setLoading] = useState(false);
   const [timeLeft, setTimeLeft] = useState(15 * 60); // 15 minutes in seconds
   const [resendLoading, setResendLoading] = useState(false);
+  
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -46,7 +48,7 @@ const EmailVerification = ({ userData, onVerificationSuccess, onBack }) => {
     setErrors({});
 
     try {
-      const response = await axios.post('http://localhost:8000/api/verify-email', {
+      const response = await axios.post(`${API_URL}/verify-email`, {
         email: userData.email,
         verification_code: verificationCode
       }, {
@@ -75,7 +77,7 @@ const EmailVerification = ({ userData, onVerificationSuccess, onBack }) => {
     setErrors({});
 
     try {
-      const response = await axios.post('http://localhost:8000/api/register', {
+      const response = await axios.post(`${API_URL}/register`, {
         fullname: userData.fullname,
         email: userData.email,
         password: userData.password,

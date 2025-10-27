@@ -35,7 +35,7 @@ const Jobs = () => {
   const [mapCenter, setMapCenter] = useState({ lat: 40.7128, lng: -74.0060 }); // Default: New York
   const [markerPosition, setMarkerPosition] = useState(null);
 
-  const API_URL = 'http://localhost:8000/api';
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
 
   useEffect(() => {
     fetchJobs();

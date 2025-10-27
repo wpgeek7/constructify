@@ -12,6 +12,8 @@ const Login = ({ onLoginSuccess, onGoogleSuccess, onSwitchToSignup, onForgotPass
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -34,7 +36,7 @@ const Login = ({ onLoginSuccess, onGoogleSuccess, onSwitchToSignup, onForgotPass
     setErrors({});
 
     try {
-      const response = await axios.post('http://localhost:8000/api/login', {
+      const response = await axios.post(`${API_URL}/login`, {
         email: formData.email,
         password: formData.password
       }, {

@@ -6,6 +6,8 @@ const ForgotPassword = ({ onBackToLogin, onResetCodeSent }) => {
   const [email, setEmail] = useState('');
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
 
   const handleChange = (e) => {
     setEmail(e.target.value);
@@ -20,7 +22,7 @@ const ForgotPassword = ({ onBackToLogin, onResetCodeSent }) => {
     setErrors({});
 
     try {
-      const response = await axios.post('http://localhost:8000/api/forgot-password', {
+      const response = await axios.post(`${API_URL}/forgot-password`, {
         email: email
       }, {
         headers: {

@@ -13,6 +13,8 @@ const ResetPassword = ({ resetData, onResetSuccess, onBackToLogin }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [timeLeft, setTimeLeft] = useState(15 * 60); // 15 minutes in seconds
+  
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -62,7 +64,7 @@ const ResetPassword = ({ resetData, onResetSuccess, onBackToLogin }) => {
     setErrors({});
 
     try {
-      const response = await axios.post('http://localhost:8000/api/reset-password', {
+      const response = await axios.post(`${API_URL}/reset-password`, {
         email: resetData.email,
         verification_code: formData.verificationCode,
         password: formData.password,

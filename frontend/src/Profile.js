@@ -13,6 +13,8 @@ const Profile = ({ user, onClose, onUpdateUser }) => {
     new_password_confirmation: ''
   });
   const [loading, setLoading] = useState(false);
+  
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState('');
   const [showPasswordSection, setShowPasswordSection] = useState(false);
@@ -25,7 +27,7 @@ const Profile = ({ user, onClose, onUpdateUser }) => {
   const fetchProfileData = async () => {
     try {
       const token = localStorage.getItem('auth_token');
-      const response = await axios.get('http://localhost:8000/api/me', {
+      const response = await axios.get(`${API_URL}/me`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Accept': 'application/json'
@@ -84,7 +86,7 @@ const Profile = ({ user, onClose, onUpdateUser }) => {
         updateData.new_password_confirmation = formData.new_password_confirmation;
       }
 
-      const response = await axios.put('http://localhost:8000/api/profile/update', updateData, {
+      const response = await axios.put(`${API_URL}/profile/update`, updateData, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',

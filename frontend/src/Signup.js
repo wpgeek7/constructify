@@ -15,6 +15,8 @@ const Signup = ({ onSignupSuccess, onGoogleSuccess, onSwitchToLogin }) => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,7 +39,7 @@ const Signup = ({ onSignupSuccess, onGoogleSuccess, onSwitchToLogin }) => {
     setErrors({});
 
     try {
-      const response = await axios.post('http://localhost:8000/api/register', formData, {
+      const response = await axios.post(`${API_URL}/register`, formData, {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'

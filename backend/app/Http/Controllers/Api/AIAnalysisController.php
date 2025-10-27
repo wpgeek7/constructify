@@ -87,8 +87,9 @@ class AIAnalysisController extends Controller
                 ]
             );
 
-            // Update upload record
+            // Update upload record with AI description
             $upload->update([
+                'description' => $analysisResult['caption'], // Save AI description
                 'ai_analyzed' => true,
                 'ai_analysis_id' => $analysis->id,
                 'ai_analyzed_at' => now()
@@ -191,48 +192,48 @@ class AIAnalysisController extends Controller
             'id' => $analysis->id,
             'upload_id' => $analysis->upload_id,
             'job_id' => $analysis->job_id,
-            
+
             // Basic Description
             'caption' => $analysis->caption,
             'detailed_description' => $analysis->detailed_description,
-            
+
             // Objects & People
             'objects_detected' => $analysis->objects_detected ?? [],
             'people_count' => $analysis->people_count,
             'people_details' => $analysis->people_details ?? [],
-            
+
             // Scene Understanding
             'scene_type' => $analysis->scene_type,
             'time_of_day' => $analysis->time_of_day,
             'weather_condition' => $analysis->weather_condition,
             'lighting_quality' => $analysis->lighting_quality,
             'scene_mood' => $analysis->scene_mood,
-            
+
             // Text & Activities
             'extracted_text' => $analysis->extracted_text,
             'has_text' => !empty($analysis->extracted_text),
             'activities_detected' => $analysis->activities_detected ?? [],
             'primary_activity' => $analysis->primary_activity,
-            
+
             // Visual Analysis
             'dominant_colors' => $analysis->dominant_colors ?? [],
             'color_palette' => $analysis->color_palette,
             'visual_aesthetics' => $analysis->visual_aesthetics,
-            
+
             // Quality Assessment
             'image_quality' => $analysis->image_quality,
             'is_blurry' => $analysis->is_blurry,
             'is_overexposed' => $analysis->is_overexposed,
             'is_underexposed' => $analysis->is_underexposed,
             'composition_notes' => $analysis->composition_notes,
-            
+
             // Safety (Construction)
             'safety_compliance' => $analysis->safety_compliance ?? [],
             'compliance_score' => $analysis->compliance_score,
             'compliance_level' => $analysis->getComplianceLevel(),
             'has_violations' => $analysis->has_violations,
             'violations_count' => $analysis->violations_count,
-            
+
             // Metadata
             'processing_time_ms' => $analysis->processing_time_ms,
             'ai_model_version' => $analysis->ai_model_version,

@@ -15,6 +15,7 @@ import WorkerDashboard from './WorkerDashboard';
 import Timesheet from './Timesheet';
 import Scheduling from './Scheduling';
 import Reports from './Reports';
+import AITestPage from './AITestPage';
 import './App.css';
 
 const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID || '641924991963-vbpberb599gec6d2kuath2m3hmdr1792.apps.googleusercontent.com';
@@ -197,6 +198,7 @@ function App() {
                 {activeTab === 'jobs' && <Jobs />}
                 {activeTab === 'scheduling' && <Scheduling />}
                 {activeTab === 'reports' && <Reports />}
+                {activeTab === 'ai-test' && <AITestPage />}
               </div>
             </div>
             {showProfile && (

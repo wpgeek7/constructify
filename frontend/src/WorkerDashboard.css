@@ -154,6 +154,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 12px;
+  margin-top: 24px;
 }
 
 .btn-timer {
