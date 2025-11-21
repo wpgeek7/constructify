@@ -16,6 +16,11 @@ return Application::configure(basePath: dirname(__DIR__))
             'api/*',
         ]);
 
+        // Enable CORS for API routes
+        $middleware->api(append: [
+            \Illuminate\Http\Middleware\HandleCors::class,
+        ]);
+
         $middleware->alias([
             'role' => \App\Http\Middleware\CheckRole::class,
         ]);

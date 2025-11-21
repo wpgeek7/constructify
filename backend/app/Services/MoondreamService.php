@@ -24,91 +24,91 @@ class MoondreamService
     public function analyzeImage(string $imageData): array
     {
         $startTime = microtime(true);
-        
+
         try {
             // 1. Get detailed description
             $detailedDescription = $this->getDetailedDescription($imageData);
-            
+
             // 2. Identify objects and people
             $objects = $this->identifyObjects($imageData);
             $peopleCount = $this->countPeople($imageData);
             $peopleDetails = $this->analyzePeople($imageData);
-            
+
             // 3. Scene understanding
             $sceneType = $this->analyzeSceneType($imageData);
             $timeOfDay = $this->analyzeTimeOfDay($imageData);
             $weather = $this->analyzeWeather($imageData);
             $lighting = $this->analyzeLighting($imageData);
             $mood = $this->analyzeSceneMood($imageData);
-            
+
             // 4. Text extraction
             $extractedText = $this->extractText($imageData);
-            
+
             // 5. Activity recognition
             $activities = $this->recognizeActivities($imageData);
             $primaryActivity = $this->getPrimaryActivity($imageData);
-            
+
             // 6. Color analysis
             $colors = $this->analyzeColors($imageData);
             $palette = $this->getColorPalette($imageData);
             $aesthetics = $this->analyzeAesthetics($imageData);
-            
+
             // 7. Quality assessment
             $quality = $this->assessQuality($imageData);
             $isBlurry = $this->checkBlurriness($imageData);
             $exposure = $this->checkExposure($imageData);
             $composition = $this->analyzeComposition($imageData);
-            
+
             // 8. Safety compliance (construction-specific)
             $safetyCompliance = $this->analyzeSafetyCompliance($imageData);
-            
+
             $processingTime = round((microtime(true) - $startTime) * 1000);
-            
+
             return [
                 'success' => true,
                 'caption' => $detailedDescription['brief'] ?? '',
                 'detailed_description' => $detailedDescription['detailed'] ?? '',
-                
+
                 // Objects & People
                 'objects_detected' => $objects,
                 'people_count' => $peopleCount,
                 'people_details' => $peopleDetails,
-                
+
                 // Scene Understanding
                 'scene_type' => $sceneType,
                 'time_of_day' => $timeOfDay,
                 'weather_condition' => $weather,
                 'lighting_quality' => $lighting,
                 'scene_mood' => $mood,
-                
+
                 // Text & Activities
                 'extracted_text' => $extractedText,
                 'activities_detected' => $activities,
                 'primary_activity' => $primaryActivity,
-                
+
                 // Visual Analysis
                 'dominant_colors' => $colors,
                 'color_palette' => $palette,
                 'visual_aesthetics' => $aesthetics,
-                
+
                 // Quality
                 'image_quality' => $quality,
                 'is_blurry' => $isBlurry,
                 'is_overexposed' => $exposure['overexposed'] ?? false,
                 'is_underexposed' => $exposure['underexposed'] ?? false,
                 'composition_notes' => $composition,
-                
+
                 // Safety (construction)
                 'safety_compliance' => $safetyCompliance['compliance'] ?? [],
                 'compliance_score' => $safetyCompliance['score'] ?? 0,
                 'has_violations' => $safetyCompliance['has_violations'] ?? false,
                 'violations_count' => $safetyCompliance['violations_count'] ?? 0,
-                
+
                 'processing_time_ms' => $processingTime,
                 'ai_model_version' => 'moondream-2b',
                 'analyzed_at' => now(),
             ];
-            
+
         } catch (\Exception $e) {
             Log::error('Moondream comprehensive analysis failed: ' . $e->getMessage());
             return [
@@ -125,7 +125,7 @@ class MoondreamService
     {
         $brief = $this->askQuestion($imageData, "Describe this image in one sentence.");
         $detailed = $this->askQuestion($imageData, "Provide a comprehensive, detailed description of everything visible in this image, including objects, people, setting, colors, and atmosphere.");
-        
+
         return [
             'brief' => $brief,
             'detailed' => $detailed
@@ -260,12 +260,12 @@ class MoondreamService
     {
         $response = $this->askQuestion($imageData, "Rate the technical quality of this image: excellent, good, fair, or poor. Consider clarity, focus, and exposure.");
         $response = strtolower($response);
-        
+
         if (strpos($response, 'excellent') !== false) return 'excellent';
         if (strpos($response, 'good') !== false) return 'good';
         if (strpos($response, 'fair') !== false) return 'fair';
         if (strpos($response, 'poor') !== false) return 'poor';
-        
+
         return 'unknown';
     }
 
@@ -285,7 +285,7 @@ class MoondreamService
     {
         $response = $this->askQuestion($imageData, "Is this image overexposed (too bright) or underexposed (too dark)? Answer: overexposed, underexposed, or properly exposed.");
         $response = strtolower($response);
-        
+
         return [
             'overexposed' => strpos($response, 'overexposed') !== false,
             'underexposed' => strpos($response, 'underexposed') !== false,
@@ -321,7 +321,7 @@ class MoondreamService
         foreach ($questions as $key => $question) {
             $answer = $this->askQuestion($imageData, $question);
             $passed = stripos($answer, 'yes') !== false && stripos($answer, 'no') === false;
-            
+
             $compliance[$key] = [
                 'question' => $question,
                 'answer' => $answer,
@@ -366,7 +366,7 @@ class MoondreamService
 
             Log::error('Moondream API error: ' . $response->body());
             return '';
-            
+
         } catch (\Exception $e) {
             Log::error('Moondream question failed: ' . $e->getMessage());
             return '';

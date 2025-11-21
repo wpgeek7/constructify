@@ -24,6 +24,13 @@ class User extends Authenticatable
         'password',
         'role',
         'phone',
+        'phone_number',
+        'phone_country_code',
+        'phone_verified_at',
+        'is_phone_verified',
+        'phone_otp',
+        'phone_otp_expires_at',
+        'auth_method',
         'address',
         'role_id',
         'availability_status',
@@ -43,6 +50,7 @@ class User extends Authenticatable
         'password',
         'remember_token',
         'verification_code',
+        'phone_otp',
     ];
 
     /**
@@ -54,9 +62,12 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'phone_verified_at' => 'datetime',
             'verification_code_expires_at' => 'datetime',
+            'phone_otp_expires_at' => 'datetime',
             'password' => 'hashed',
             'is_verified' => 'boolean',
+            'is_phone_verified' => 'boolean',
         ];
     }
 

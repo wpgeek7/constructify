@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\SnsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -14,8 +15,366 @@ use Carbon\Carbon;
 
 class AuthController extends Controller
 {
+    protected $snsService;
+
+    public function __construct(SnsService $snsService)
+    {
+        $this->snsService = $snsService;
+    }
+
     /**
-     * Register a new user
+     * Register with phone number (PRIMARY METHOD)
+     */
+    public function registerWithPhone(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'fullname' => 'required|string|max:255',
+            'phone_number' => 'required|string|min:10|max:15',
+            'phone_country_code' => 'required|string|max:5',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation errors',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        // Format phone number
+        $formattedPhone = $this->snsService->formatPhoneNumber(
+            $request->phone_number,
+            $request->phone_country_code
+        );
+
+        // Validate phone format
+        if (!$this->snsService->validatePhoneNumber($formattedPhone)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid phone number format',
+                'errors' => ['phone_number' => ['Please enter a valid phone number']]
+            ], 422);
+        }
+
+        // Check if phone already exists
+        $existingUser = User::where('phone_number', $formattedPhone)->first();
+        if ($existingUser) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Phone number already registered',
+                'errors' => ['phone_number' => ['This phone number is already in use']]
+            ], 422);
+        }
+
+        // Generate OTP
+        $otp = $this->snsService->generateOTP();
+        $expiresAt = Carbon::now()->addMinutes(10); // OTP expires in 10 minutes
+
+        // Send OTP via SMS
+        $smsResult = $this->snsService->sendOTP($formattedPhone, $otp);
+
+        if (!$smsResult['success']) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to send OTP. Please try again.',
+                'errors' => ['phone_number' => ['Unable to send verification code']]
+            ], 500);
+        }
+
+        // Create user
+        $user = User::create([
+            'name' => $request->fullname,
+            'fullname' => $request->fullname,
+            'phone_number' => $formattedPhone,
+            'phone_country_code' => $request->phone_country_code,
+            'password' => Hash::make($request->password),
+            'role' => 'employee',
+            'approval_status' => 'pending',
+            'availability_status' => 'available',
+            'phone_otp' => $otp,
+            'phone_otp_expires_at' => $expiresAt,
+            'is_phone_verified' => false,
+            'auth_method' => 'phone',
+        ]);
+
+        Log::info("User registered with phone: {$formattedPhone}", [
+            'user_id' => $user->id,
+            'otp_dev' => $this->snsService->isEnabled() ? 'hidden' : $otp,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Registration successful. Please verify your phone number with the OTP sent.',
+            'data' => [
+                'user_id' => $user->id,
+                'phone_number' => $formattedPhone,
+                'expires_at' => $expiresAt->toISOString(),
+                'otp' => !$this->snsService->isEnabled() ? $otp : null, // Only in dev mode
+            ]
+        ], 201);
+    }
+
+    /**
+     * Verify phone OTP
+     */
+    public function verifyPhoneOTP(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'phone_number' => 'required|string',
+            'otp' => 'required|string|size:6',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation errors',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $user = User::where('phone_number', $request->phone_number)->first();
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not found'
+            ], 404);
+        }
+
+        if ($user->phone_otp !== $request->otp) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid OTP code'
+            ], 400);
+        }
+
+        if (Carbon::now()->gt($user->phone_otp_expires_at)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'OTP has expired. Please request a new one.'
+            ], 400);
+        }
+
+        // Clear OTP
+        $user->update([
+            'phone_otp' => null,
+            'phone_otp_expires_at' => null,
+        ]);
+
+        // If user is not yet verified, verify them and send welcome SMS
+        if (!$user->is_phone_verified) {
+            $user->update([
+                'is_phone_verified' => true,
+                'phone_verified_at' => Carbon::now(),
+            ]);
+
+            // Send welcome SMS
+            $this->snsService->sendWelcomeSMS($user->phone_number, $user->fullname);
+        }
+
+        // Generate token for login
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Phone verified successfully',
+            'data' => [
+                'user' => [
+                    'id' => $user->id,
+                    'fullname' => $user->fullname,
+                    'phone_number' => $user->phone_number,
+                    'email' => $user->email,
+                    'role' => $user->role,
+                    'is_phone_verified' => $user->is_phone_verified,
+                    'auth_method' => $user->auth_method,
+                ],
+                'token' => $token,
+                'redirect_to' => 'dashboard'
+            ]
+        ], 200);
+    }
+
+    /**
+     * Login with phone number
+     */
+    public function loginWithPhone(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'phone_number' => 'required|string',
+            'password' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation errors',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $user = User::where('phone_number', $request->phone_number)->first();
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid credentials'
+            ], 401);
+        }
+
+        if (!$user->is_phone_verified) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Please verify your phone number before logging in',
+                'requires_verification' => true,
+                'phone_number' => $user->phone_number,
+            ], 401);
+        }
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Login successful',
+            'data' => [
+                'user' => [
+                    'id' => $user->id,
+                    'fullname' => $user->fullname,
+                    'phone_number' => $user->phone_number,
+                    'email' => $user->email,
+                    'role' => $user->role,
+                    'is_phone_verified' => $user->is_phone_verified,
+                    'auth_method' => $user->auth_method,
+                ],
+                'token' => $token,
+                'redirect_to' => 'dashboard'
+            ]
+        ], 200);
+    }
+
+    /**
+     * Send OTP for login (for existing users)
+     */
+    public function sendLoginOTP(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'phone_number' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation errors',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $user = User::where('phone_number', $request->phone_number)->first();
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No account found with this phone number'
+            ], 404);
+        }
+
+        // Generate new OTP
+        $otp = $this->snsService->generateOTP();
+        $expiresAt = Carbon::now()->addMinutes(10);
+
+        // Send OTP
+        $smsResult = $this->snsService->sendOTP($user->phone_number, $otp);
+
+        if (!$smsResult['success']) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to send OTP. Please try again.'
+            ], 500);
+        }
+
+        // Update user with new OTP
+        $user->update([
+            'phone_otp' => $otp,
+            'phone_otp_expires_at' => $expiresAt,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'OTP sent successfully',
+            'data' => [
+                'phone_number' => $user->phone_number,
+                'expires_at' => $expiresAt->toISOString(),
+                'otp' => !$this->snsService->isEnabled() ? $otp : null, // Only in dev mode
+            ]
+        ], 200);
+    }
+
+    /**
+     * Resend OTP to phone
+     */
+    public function resendPhoneOTP(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'phone_number' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation errors',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $user = User::where('phone_number', $request->phone_number)->first();
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not found'
+            ], 404);
+        }
+
+        if ($user->is_phone_verified) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Phone number already verified'
+            ], 400);
+        }
+
+        // Generate new OTP
+        $otp = $this->snsService->generateOTP();
+        $expiresAt = Carbon::now()->addMinutes(10);
+
+        // Send OTP
+        $smsResult = $this->snsService->sendOTP($user->phone_number, $otp);
+
+        if (!$smsResult['success']) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to send OTP. Please try again.'
+            ], 500);
+        }
+
+        // Update user with new OTP
+        $user->update([
+            'phone_otp' => $otp,
+            'phone_otp_expires_at' => $expiresAt,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'OTP sent successfully',
+            'data' => [
+                'phone_number' => $user->phone_number,
+                'expires_at' => $expiresAt->toISOString(),
+                'otp' => !$this->snsService->isEnabled() ? $otp : null, // Only in dev mode
+            ]
+        ], 200);
+    }
+
+    /**
+     * Register a new user (EMAIL - SECONDARY METHOD)
      */
     public function register(Request $request)
     {

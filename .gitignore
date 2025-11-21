@@ -1,35 +1,285 @@
-# Environment files
+# ==================================
+# Environment & Secrets
+# ==================================
 .env
 .env.*
 !.env.example
-!env.docker.example
-!backend/.env.production
+!.env.docker.example
 
-# AWS credentials
+# AWS credentials & keys
 *.pem
-constructify-key.pem
+*.key
+*.ppk
+constructify-key*.pem
+constructify-key*.pub
 
+# ==================================
+# Frontend (React/Node.js)
+# ==================================
+# Dependencies
+frontend/node_modules/
+frontend/package-lock.json
+frontend/yarn.lock
+frontend/pnpm-lock.yaml
+
+# Production build
+frontend/build/
+frontend/dist/
+
+# Testing
+frontend/coverage/
+
+# Misc
+frontend/.DS_Store
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+
+# Debug logs
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/lerna-debug.log*
+
+# ==================================
+# Frontend v2 (New UI)
+# ==================================
+frontend-v2/node_modules/
+frontend-v2/build/
+frontend-v2/dist/
+frontend-v2/.DS_Store
+frontend-v2/npm-debug.log*
+
+# ==================================
+# Backend (Laravel/PHP)
+# ==================================
+# Dependencies
+backend/vendor/
+backend/node_modules/
+
+# Laravel specific
+backend/storage/*.key
+backend/.phpunit.result.cache
+backend/Homestead.json
+backend/Homestead.yaml
+backend/npm-debug.log
+backend/yarn-error.log
+
+# Laravel cache & compiled
+backend/bootstrap/cache/*
+!backend/bootstrap/cache/.gitkeep
+backend/storage/framework/cache/*
+!backend/storage/framework/cache/.gitkeep
+backend/storage/framework/sessions/*
+!backend/storage/framework/sessions/.gitkeep
+backend/storage/framework/views/*
+!backend/storage/framework/views/.gitkeep
+backend/storage/logs/*
+!backend/storage/logs/.gitkeep
+
+# User uploaded files (optional - uncomment if needed)
+# backend/storage/app/public/*
+# backend/public/storage
+# backend/public/plans/*
+
+# ==================================
 # Docker
+# ==================================
 docker-compose.override.yml
+.docker/
+*.dockerfile.local
 
-# OS
-.DS_Store
-Thumbs.db
-
-# IDE
-.idea/
-.vscode/
-*.swp
-*.swo
-
-# Logs
-*.log
-
-# Backups
-backups/
+# ==================================
+# Database
+# ==================================
 *.sql
+*.sqlite
+*.db
+backups/
+database/backups/
 
-# Temporary
+# ==================================
+# Operating Systems
+# ==================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.directory
+.Trash-*
+.nfs*
+
+# ==================================
+# IDEs & Editors
+# ==================================
+# VSCode
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+.history/
+
+# JetBrains (PHPStorm, WebStorm, etc)
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+.idea_modules/
+
+# Sublime Text
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+*.sublime-workspace
+*.sublime-project
+sftp-config.json
+sftp-config-alt*.json
+
+# Vim
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+Session.vim
+Sessionx.vim
+.netrwhist
+*~
+tags
+[._]*.un~
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# ==================================
+# Logs & Monitoring
+# ==================================
+*.log
+logs/
+*.log.*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# ==================================
+# Temporary & Cache Files
+# ==================================
 tmp/
 temp/
+*.tmp
+*.cache
+*.bak
+*.swp
+*.swo
+*~.nib
+local.properties
 
+# ==================================
+# Deployment & Build Artifacts
+# ==================================
+deployment-logs/
+*.tar.gz
+*.zip
+*.rar
+
+# Deployment scripts output
+quick-deploy-*.sh.log
+deployment-output/
+
+# ==================================
+# Testing & Coverage
+# ==================================
+coverage/
+.nyc_output/
+*.lcov
+.coverage
+htmlcov/
+.pytest_cache/
+.phpunit.result.cache
+
+# ==================================
+# Certificates & SSL
+# ==================================
+*.crt
+*.csr
+*.der
+*.p12
+*.pfx
+
+# ==================================
+# Misc
+# ==================================
+.cursorrules
+.cursoridea
+*.orig
+*.rej
+.project
+.settings/
+.classpath
+.c9/
+.grunt
+.lock-wscript
+bower_components
+.sass-cache/
+connect.lock
+typings/
+.angular/
+.eslintcache
+.node_repl_history
+*.tgz
+.npm
+.yarn-integrity
+
+# ==================================
+# AWS & Cloud
+# ==================================
+.aws-sam/
+.amplify/
+*.tfstate
+*.tfstate.*
+.terraform/
+
+# ==================================
+# Keep Important Files
+# ==================================
+!.gitkeep
+!.htaccess

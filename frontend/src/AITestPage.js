@@ -84,6 +84,10 @@ const AITestPage = () => {
           ...prev,
           [uploadId]: response.data.data
         }));
+        
+        // Refresh jobs to get updated upload description
+        await fetchJobs();
+        
         alert(`✅ Analysis Complete!\n\nCompliance Score: ${response.data.data.compliance_score}%\nViolations Found: ${response.data.data.violations_count}`);
       }
     } catch (error) {
@@ -180,7 +184,9 @@ const AITestPage = () => {
 
                         <div className="upload-info">
                           <strong>Upload ID: {upload.id}</strong>
-                          <p>{upload.description || 'No description'}</p>
+                          <p className="upload-description">
+                            {analysis?.caption || upload.description || 'No description'}
+                          </p>
                           <small>Uploaded: {new Date(upload.created_at).toLocaleString()}</small>
                           {upload.ai_analyzed && <span className="analyzed-badge">✅ Analyzed</span>}
                         </div>
@@ -204,7 +210,7 @@ const AITestPage = () => {
 
                           {analysis && !isAnalyzing && (
                             <div className="analyzed-section">
-                              <div className="analysis-header">
+                              <div className="analysis-top">
                                 <span 
                                   className="compliance-badge"
                                   style={{ backgroundColor: getComplianceColor(analysis.compliance_score) }}
@@ -212,11 +218,11 @@ const AITestPage = () => {
                                   {analysis.compliance_score}% Compliant
                                 </span>
                                 <button 
-                                  className="btn-reanalyze-small"
+                                  className="btn-reanalyze-icon"
                                   onClick={() => analyzePhoto(upload.id, job.job_name)}
-                                  title="Re-analyze"
+                                  title="Re-analyze with AI"
                                 >
-                                  🔄 Re-analyze
+                                  🔄
                                 </button>
                               </div>
                               <button 

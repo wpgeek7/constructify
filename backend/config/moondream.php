@@ -6,7 +6,7 @@ return [
     | Moondream AI API Configuration
     |--------------------------------------------------------------------------
     */
-    
+
     'api_key' => env('MOONDREAM_API_KEY'),
     'api_url' => env('MOONDREAM_API_URL', 'https://api.moondream.ai/v1'),
     'timeout' => env('MOONDREAM_TIMEOUT', 30), // seconds
@@ -47,18 +47,18 @@ return [
     'detection_categories' => [
         // People & PPE
         'person', 'worker', 'hard hat', 'safety vest', 'safety glasses', 'gloves',
-        
+
         // Equipment
         'excavator', 'crane', 'forklift', 'scaffolding', 'ladder', 'bulldozer',
         'cement mixer', 'dump truck', 'backhoe',
-        
+
         // Materials
         'construction material', 'concrete', 'steel beams', 'lumber', 'bricks',
         'debris', 'tools',
-        
+
         // Hazards
         'open trench', 'fall hazard', 'exposed wiring', 'wet floor',
-        
+
         // Safety Equipment
         'fire extinguisher', 'first aid kit', 'warning sign', 'safety barrier',
         'caution tape',

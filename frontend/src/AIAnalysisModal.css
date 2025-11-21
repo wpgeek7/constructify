@@ -5,14 +5,14 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 9999;
-  padding: 2rem;
-  animation: fadeIn 0.2s ease-out;
+  padding: 0;
+  animation: fadeIn 0.3s ease-out;
 }
 
 @keyframes fadeIn {
@@ -26,13 +26,11 @@
 
 /* Modal Container */
 .modal-container {
-  background: white;
-  border-radius: 20px;
-  max-width: 1400px;
+  background: #f8fafc;
   width: 100%;
-  max-height: 90vh;
+  height: 100vh;
   overflow-y: auto;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
   animation: slideUp 0.3s ease-out;
 }
 
@@ -52,13 +50,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 2rem 2.5rem;
+  padding: 2rem 3rem;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  border-radius: 20px 20px 0 0;
   position: sticky;
   top: 0;
   z-index: 10;
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
 }
 
 .modal-header h2 {
@@ -89,25 +87,30 @@
 
 /* Modal Content */
 .modal-content {
-  padding: 2.5rem;
+  padding: 3rem;
+  max-width: 1600px;
+  margin: 0 auto;
 }
 
 /* Image Section */
 .modal-image-section {
   position: relative;
-  border-radius: 16px;
+  border-radius: 20px;
   overflow: hidden;
-  margin-bottom: 2.5rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  margin-bottom: 3rem;
+  background: white;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12),
+              0 4px 16px rgba(0, 0, 0, 0.08);
+  border: 2px solid #e5e7eb;
 }
 
 .modal-image {
   width: 100%;
   height: auto;
-  max-height: 500px;
+  max-height: 600px;
   object-fit: contain;
   display: block;
-  background: #000;
+  background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
 }
 
 .compliance-overlay {
@@ -129,56 +132,84 @@
 /* Analysis Grid */
 .analysis-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  gap: 2rem;
 }
 
 /* Analysis Cards */
 .analysis-card {
-  background: #f9fafb;
-  border-radius: 16px;
-  padding: 1.5rem;
-  border: 2px solid #e5e7eb;
-  transition: all 0.3s ease;
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08),
+              0 1px 4px rgba(0, 0, 0, 0.04);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .analysis-card:hover {
   border-color: #667eea;
-  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.15);
-  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(102, 126, 234, 0.2),
+              0 4px 16px rgba(102, 126, 234, 0.1);
+  transform: translateY(-4px);
 }
 
 .description-card {
   grid-column: 1 / -1;
   background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-  border-color: #bae6fd;
+  border: 2px solid #bae6fd;
+  box-shadow: 0 6px 20px rgba(56, 189, 248, 0.15),
+              0 2px 8px rgba(56, 189, 248, 0.08);
+}
+
+.description-card:hover {
+  border-color: #7dd3fc;
+  box-shadow: 0 16px 40px rgba(56, 189, 248, 0.25),
+              0 6px 20px rgba(56, 189, 248, 0.15);
 }
 
 .safety-card {
   grid-column: 1 / -1;
   background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-  border-color: #bbf7d0;
+  border: 2px solid #bbf7d0;
+  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.15),
+              0 2px 8px rgba(34, 197, 94, 0.08);
+}
+
+.safety-card:hover {
+  border-color: #86efac;
+  box-shadow: 0 16px 40px rgba(34, 197, 94, 0.25),
+              0 6px 20px rgba(34, 197, 94, 0.15);
 }
 
 /* Card Header */
 .card-header {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 1.25rem;
-  padding-bottom: 1rem;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 3px solid #f3f4f6;
 }
 
 .card-icon {
-  font-size: 1.75rem;
+  font-size: 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.25);
 }
 
 .card-header h3 {
-  font-size: 1.25rem;
-  font-weight: 600;
+  font-size: 1.35rem;
+  font-weight: 700;
   color: #1f2937;
   margin: 0;
+  letter-spacing: -0.01em;
 }
 
 /* Card Body */
@@ -448,16 +479,21 @@
   }
 
   .modal-container {
-    border-radius: 0;
-    max-height: 100vh;
+    width: 100%;
+    height: 100vh;
   }
 
   .modal-header {
-    padding: 1.5rem;
-    border-radius: 0;
+    padding: 1.25rem 1.5rem;
   }
 
   .modal-header h2 {
+    font-size: 1.15rem;
+  }
+
+  .modal-close {
+    width: 36px;
+    height: 36px;
     font-size: 1.25rem;
   }
 
@@ -467,6 +503,28 @@
 
   .analysis-grid {
     grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .analysis-card {
+    padding: 1.5rem;
+    border-radius: 16px;
+  }
+
+  .card-header {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .card-icon {
+    width: 44px;
+    height: 44px;
+    font-size: 1.75rem;
+    border-radius: 10px;
+  }
+
+  .card-header h3 {
+    font-size: 1.15rem;
   }
 
   .compliance-overlay {
@@ -475,16 +533,12 @@
   }
 
   .compliance-badge-large {
-    padding: 0.75rem 1rem;
-    font-size: 1rem;
+    font-size: 0.9rem;
+    padding: 0.625rem 1.25rem;
   }
 
-  .metadata-grid {
-    gap: 1.5rem;
-  }
-
-  .modal-footer {
-    padding: 1.5rem;
+  .modal-image {
+    max-height: 400px;
   }
 }
 

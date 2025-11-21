@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    'sns' => [
+        'enabled' => env('SNS_ENABLED', false), // Set to true when ready
+        'key' => env('AWS_SNS_KEY', env('AWS_ACCESS_KEY_ID')),
+        'secret' => env('AWS_SNS_SECRET', env('AWS_SECRET_ACCESS_KEY')),
+        'region' => env('AWS_SNS_REGION', 'us-east-1'),
+    ],
+
 ];

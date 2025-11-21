@@ -6,11 +6,13 @@ import EmailVerification from './EmailVerification';
 import ForgotPassword from './ForgotPassword';
 import ResetPassword from './ResetPassword';
 import Header from './Header';
-import Sidebar from './Sidebar';
 import Profile from './Profile';
 import Employees from './Employees';
 import Roles from './Roles';
 import Jobs from './Jobs';
+import Plans from './Plans';
+import BidSchedule from './BidSchedule';
+import PricingSheet from './PricingSheet';
 import WorkerDashboard from './WorkerDashboard';
 import Timesheet from './Timesheet';
 import Scheduling from './Scheduling';
@@ -178,24 +180,70 @@ function App() {
         // Admin Dashboard
         return (
           <>
-            <Header 
-              user={authData.user}
-              onShowProfile={handleShowProfile}
-              onLogout={() => {
-                localStorage.removeItem('auth_token');
-                localStorage.removeItem('user');
-                setCurrentStep('login');
-                setUserData(null);
-                setAuthData(null);
-              }}
-            />
+            {/* Hide Header for Plans, BidSchedule and PricingSheet pages */}
+            {activeTab !== 'plans' && activeTab !== 'bid-schedule' && activeTab !== 'pricing-sheet' && (
+              <Header 
+                user={authData.user}
+                onShowProfile={handleShowProfile}
+                activeTab={activeTab}
+                onTabChange={setActiveTab}
+                onLogout={() => {
+                  localStorage.removeItem('auth_token');
+                  localStorage.removeItem('user');
+                  setCurrentStep('login');
+                  setUserData(null);
+                  setAuthData(null);
+                }}
+              />
+            )}
             <div className="dashboard-layout">
-              <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
-              <div className="dashboard-main">
+              <div className="dashboard-main full-width">
                 {activeTab === 'timesheet' && <Timesheet />}
                 {activeTab === 'employees' && <Employees />}
                 {activeTab === 'roles' && <Roles />}
                 {activeTab === 'jobs' && <Jobs />}
+                {activeTab === 'plans' && (
+                  <Plans 
+                    user={authData.user}
+                    onShowProfile={handleShowProfile}
+                    onTabChange={setActiveTab}
+                    onLogout={() => {
+                      localStorage.removeItem('auth_token');
+                      localStorage.removeItem('user');
+                      setCurrentStep('login');
+                      setUserData(null);
+                      setAuthData(null);
+                    }}
+                  />
+                )}
+                {activeTab === 'bid-schedule' && (
+                  <BidSchedule 
+                    user={authData.user}
+                    onShowProfile={handleShowProfile}
+                    onTabChange={setActiveTab}
+                    onLogout={() => {
+                      localStorage.removeItem('auth_token');
+                      localStorage.removeItem('user');
+                      setCurrentStep('login');
+                      setUserData(null);
+                      setAuthData(null);
+                    }}
+                  />
+                )}
+                {activeTab === 'pricing-sheet' && (
+                  <PricingSheet 
+                    user={authData.user}
+                    onShowProfile={handleShowProfile}
+                    onTabChange={setActiveTab}
+                    onLogout={() => {
+                      localStorage.removeItem('auth_token');
+                      localStorage.removeItem('user');
+                      setCurrentStep('login');
+                      setUserData(null);
+                      setAuthData(null);
+                    }}
+                  />
+                )}
                 {activeTab === 'scheduling' && <Scheduling />}
                 {activeTab === 'reports' && <Reports />}
                 {activeTab === 'ai-test' && <AITestPage />}

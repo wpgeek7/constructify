@@ -10,12 +10,14 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  background: #2C2C2C;
 }
 
 .App {
   min-height: 100vh;
   width: 100%;
   position: relative;
+  background: #2C2C2C;
 }
 
 /* Loading Animation */
@@ -193,7 +195,7 @@ body {
 .dashboard-main {
   flex: 1;
   margin-left: 220px;
-  background: #f9fafb;
+  background: #2C2C2C;
   min-height: calc(100vh - 70px);
   width: calc(100% - 220px);
   transition: margin-left 0.3s ease;
@@ -204,6 +206,7 @@ body {
 .dashboard-main.full-width {
   margin-left: 0;
   width: 100%;
+  background: #2C2C2C;
 }
 
 /* Responsive Layout */
